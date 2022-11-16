@@ -1,4 +1,4 @@
 # MastersProject
 Work completed based upon my masters project on radio interferometry
 
-Hello world!
+Hello from Ian!
