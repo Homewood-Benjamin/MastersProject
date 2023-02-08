@@ -133,11 +133,19 @@ plt.title('Sersic Profile for M31, with differnt sersic indexes')
 plt.savefig('./sersic_profile_M31_n.png', dpi=300, bbox_inches='tight')
 
 #PLotting the forier transform of M31
-sb_M31 = I_R(Ie_A ,r_A ,R_A ,n_A)
+M31_sb = I_R(Ie_A ,r_A ,R_A ,n_A)
+M31x2_sb = I_R(Ie_A ,r_A ,R_A*2 ,n_A)
+M31x4_sb = I_R(Ie_A ,r_A ,R_A*4 ,n_A)
 
 plt.figure()
 #Fourier Transform of sersic profile
-M31_fft = np.fft.fftshift(np.abs(np.fft.fft(sb_M31))) / np.sqrt(len(sb_M31))
-plt.plot(r_A,sb_M31)
-plt.plot(r_A,M31_fft)
+
+M31_fft = np.fft.fftshift(np.abs(np.fft.fft(M31_sb))) / np.sqrt(len(M31_sb))
+M31x2_fft = np.fft.fftshift(np.abs(np.fft.fft(M31x2_sb))) / np.sqrt(len(M31x2_sb))
+M31x4_fft = np.fft.fftshift(np.abs(np.fft.fft(M31x4_sb))) / np.sqrt(len(M31x4_sb))
+
+plt.plot(r_A,M31_fft, label = 'M31 ft')
+plt.plot(r_A*2,M31x2_fft, label = 'M31 Rx2 ft')
+plt.plot(r_A*4,M31x4_fft, label = 'M31 Rx4 ft')
+plt.legend(loc = 'best')
 plt.savefig('./FourierTransform_M31.png', dpi=300, bbox_inches='tight')
