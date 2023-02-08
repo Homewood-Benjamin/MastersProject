@@ -1,12 +1,7 @@
 import numpy as np
-import pylab as plt
-
-print("Hello World")
-
-import numpy as np
 from astropy.modeling.models import Sersic1D
 import matplotlib.pyplot as plt
-
+print("Hello World")
 #This is the inbuilt function based from astropy
 
 plt.figure()
@@ -48,11 +43,12 @@ plt.xlabel('log radius')
 plt.ylabel('log surface brightness')
 plt.axis([1e-1, 30, 1e-2, 1e3])
 
+#Sersic profile for different sersic profiles.
 plt.savefig('./sersic_profile.png', dpi=300, bbox_inches='tight')
 
-diff = (s1(r) - Ir[9])
+diff = (s1(r) - Ir[4])
 plt.figure()
-plt.semilogx(diff,r)
+plt.plot(diff,r)
 plt.ylim([0,1])
 plt.ylabel('Difference')
 plt.xlabel('Radius')
@@ -64,21 +60,84 @@ plt.savefig('./diff_sersic_profile.png', dpi=300, bbox_inches='tight')
 
 R_A = 3.167 #arcseconds
 Re_A = 0.69 #Kpsc0.69
-Ie_A = 18.6
+Ie_A = 26.11
 n_A = 1.80
 
 r_A = np.arange(0,9,0.01) #in Kpc
 plt.figure()
-plt.plot(r_A,I_R(Ie_A,r_A,Re_A,n_A))
-plt.xscale('log')
-plt.yscale('log')
+plt.plot(r_A,I_R(Ie_A ,r_A ,R_A ,n_A))
 
-#ax = plt.gca()
-#ax.invert_yaxis()
-
-plt.xlabel('log radius Kpc')
-plt.ylabel('log surface brightness')
+plt.xlabel('radius')
+plt.ylabel('surface brightness')
+plt.title('Sersic Profile for M31')
 
 plt.savefig('./sersic_profile_M31.png', dpi=300, bbox_inches='tight')
 
+#example for a galaxy twise as large as Andromeda
 
+R_A = 3.167*2 #arcseconds
+Re_A = 0.69 #Kpsc0.69
+Ie_A = 26.11
+n_A = 1.80
+
+r_A = np.arange(0,9,0.01) #in Kpc
+
+plt.plot(r_A,I_R(Ie_A ,r_A ,R_A ,n_A), label = '2 times RA')
+plt.legend(loc = 'best')
+
+plt.xlabel('radius')
+plt.ylabel('surface brightness')
+plt.title('Sersic Profile for M31_double_R_A')
+#plt.savefig('./sersic_profile_double.png', dpi=300, bbox_inches='tight')
+
+#example for a galaxy four times as large as Andromeda
+
+R_A = 3.167*4 #arcseconds
+Re_A = 0.69 #Kpsc0.69
+Ie_A = 26.11
+n_A = 1.80
+
+r_A = np.arange(0,9,0.01) #in Kpc
+#plt.figure()
+plt.plot(r_A,I_R(Ie_A ,r_A ,R_A ,n_A), label = '4 times RA')
+plt.legend(loc = 'best')
+
+plt.xlabel('radius')
+plt.ylabel('surface brightness')
+plt.title('Sersic Profile for M31_quad_R_A')
+
+plt.savefig('./sersic_profile_M31_2X_4X_RA.png', dpi=300, bbox_inches='tight')
+
+#plotting multiple sersic indexes with the same radius
+
+R_A = 3.167 #arcseconds
+Re_A = 0.69 #Kpsc0.69
+Ie_A = 26.11
+n_A = 1.80
+
+r_A = np.arange(0,9,0.01) #in Kpc
+plt.figure()
+plt.plot(r_A,I_R(Ie_A ,r_A ,R_A ,n_A), label = 'Sersic index = 1.8')
+plt.plot(r_A,I_R(Ie_A ,r_A ,R_A ,2), label = 'Sersic index = 2')
+plt.plot(r_A,I_R(Ie_A ,r_A ,R_A ,5), label = 'Sersic index = 5')
+plt.plot(r_A,I_R(Ie_A ,r_A ,R_A ,7), label = 'Sersic index = 7')
+plt.plot(r_A,I_R(Ie_A ,r_A ,R_A ,9), label = 'Sersic index = 9')
+
+plt.legend(loc = 'best')
+plt.yscale('log')
+plt.xscale('log')
+plt.xlabel('radius')
+plt.ylabel('surface brightness')
+plt.title('Sersic Profile for M31, with differnt sersic indexes')
+
+plt.savefig('./sersic_profile_M31_n.png', dpi=300, bbox_inches='tight')
+
+#PLotting the forier transform of M31
+sb_M31 = I_R(Ie_A ,r_A ,R_A ,n_A)
+
+plt.figure()
+#Fourier Transform of sersic profile
+M31_fft = np.fft.fftshift(np.abs(np.fft.fft(sb_M31))) / np.sqrt(len(sb_M31))
+plt.plot(r_A,sb_M31)
+plt.plot(r_A,M31_fft)
+plt.savefig('./FourierTransform_M31.png', dpi=300, bbox_inches='tight')
