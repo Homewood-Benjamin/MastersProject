@@ -46,13 +46,15 @@ plt.axis([1e-1, 30, 1e-2, 1e3])
 #Sersic profile for different sersic profiles.
 plt.savefig('./sersic_profile.png', dpi=300, bbox_inches='tight')
 
-diff = (s1(r) - Ir[4])
+diff = (s1(r) - Ir[9])/s1(r)
+mean_diff = np.mean(diff)
 plt.figure()
-plt.plot(diff,r)
-plt.ylim([0,1])
-plt.ylabel('Difference')
+plt.plot(r,diff)
+plt.axhline(mean_diff, color = 'black', label = 'Mean')
+plt.legend(loc = 'best')
+plt.ylabel('Percentage Difference')
 plt.xlabel('Radius')
-plt.title('Difference between inbuilt model and hand made model for a sersic index of 9')
+plt.title('Difference between Astropy model and my model for a sersic index of 9')
 
 plt.savefig('./diff_sersic_profile.png', dpi=300, bbox_inches='tight')
 
@@ -65,7 +67,8 @@ n_A = 1.80
 
 r_A = np.arange(0,9,0.01) #in Kpc
 plt.figure()
-plt.plot(r_A,I_R(Ie_A ,r_A ,R_A ,n_A))
+Ir_M31 = I_R(Ie_A ,r_A ,R_A ,n_A)
+plt.plot(r_A,Ir_M31)
 
 plt.xlabel('radius')
 plt.ylabel('surface brightness')
@@ -82,7 +85,9 @@ n_A = 1.80
 
 r_A = np.arange(0,9,0.01) #in Kpc
 
-plt.plot(r_A,I_R(Ie_A ,r_A ,R_A ,n_A), label = '2 times RA')
+Ir_M31_2 = I_R(Ie_A ,r_A ,R_A ,n_A)
+
+plt.plot(r_A,Ir_M31_2, label = '2 times RA')
 plt.legend(loc = 'best')
 
 plt.xlabel('radius')
@@ -133,19 +138,38 @@ plt.title('Sersic Profile for M31, with differnt sersic indexes')
 plt.savefig('./sersic_profile_M31_n.png', dpi=300, bbox_inches='tight')
 
 #PLotting the forier transform of M31
-M31_sb = I_R(Ie_A ,r_A ,R_A ,n_A)
-M31x2_sb = I_R(Ie_A ,r_A ,R_A*2 ,n_A)
-M31x4_sb = I_R(Ie_A ,r_A ,R_A*4 ,n_A)
-
-plt.figure()
 #Fourier Transform of sersic profile
+n=len(r_A)                     #number of radius points
+dr=r_A[1]-r_A[0]                 # time interval
 
-M31_fft = np.fft.fftshift(np.abs(np.fft.fft(M31_sb))) / np.sqrt(len(M31_sb))
-M31x2_fft = np.fft.fftshift(np.abs(np.fft.fft(M31x2_sb))) / np.sqrt(len(M31x2_sb))
-M31x4_fft = np.fft.fftshift(np.abs(np.fft.fft(M31x4_sb))) / np.sqrt(len(M31x4_sb))
+M31_fr = np.fft.fftshift(np.fft.fftfreq(n, dr))
+M31_ft = np.fft.fftshift(np.fft.fft(Ir_M31))
 
-plt.plot(r_A,M31_fft, label = 'M31 ft')
-plt.plot(r_A*2,M31x2_fft, label = 'M31 Rx2 ft')
-plt.plot(r_A*4,M31x4_fft, label = 'M31 Rx4 ft')
-plt.legend(loc = 'best')
-plt.savefig('./FourierTransform_M31.png', dpi=300, bbox_inches='tight')
+#graph for sersic profile of M31
+plt.figure(figsize=(20,12))
+plt.subplot(321)
+plt.plot(r_A,Ir_M31,'.-')
+plt.xlabel('time (secs)')
+plt.title('Sersic profile for M31')
+
+plt.subplot(325)
+plt.plot(M31_fr,np.abs(M31_ft), '.-')
+plt.xlabel('freq (Hz)')
+plt.title('spectrum, abs');
+plt.savefig('./M31 sersic fourier transform.png', dpi=300, bbox_inches='tight')
+
+#Plot a fourier transform of a galaxy twise the size of M31_fr
+M31_ft_2 = np.fft.fftshift(np.fft.fft(Ir_M31_2))
+
+#graph for sersic profile of M31
+plt.figure(figsize=(20,12))
+plt.subplot(321)
+plt.plot(r_A,Ir_M31_2,'.-')
+plt.xlabel('time (secs)')
+plt.title('Sersic profile for a galaxy twise the radius of M31')
+
+plt.subplot(325)
+plt.plot(M31_fr,np.abs(M31_ft_2), '.-')
+plt.xlabel('freq (Hz)')
+plt.title('spectrum, abs');
+plt.savefig('./M31x2 sersic fourier transform.png', dpi=300, bbox_inches='tight')
