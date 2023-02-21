@@ -12,6 +12,8 @@ for n in range(1, 10):
      s1.n = n
      plt.loglog(r, s1(r), color=str(float(n) / 15))
 
+Astro_s4 = Sersic1D(1,1,4)
+
 plt.axis([1e-1, 30, 1e-2, 1e3])
 plt.xlabel('log Radius')
 plt.ylabel('log Surface Brightness')
@@ -20,16 +22,16 @@ plt.text(.25, 300, 'n=10')
 plt.xticks([])
 plt.yticks([])
 plt.show()
-
+plt.title('Astropy: sersic profile, showing surface brightness with radius')
 plt.legend(loc = 'best')
 plt.savefig('./sersic_profile_function.png', dpi=300, bbox_inches='tight')
 
 #own made function
 
 def I_R(Ie,R,Re,n):
-  bn = 1.9992*n - 0.3271
-  I = Ie*np.exp(-bn*((R/Re)**(1/n)-1))
-  return I
+    bn = 1.9992*n - 0.3271 #change to longer approx / or use b for n=4
+    I = Ie*np.exp(-bn*((R/Re)**(1/n)-1))
+    return I
 
 Ir = np.zeros((10,len(r)))
 
@@ -41,12 +43,14 @@ for i in range(1,10):
 
 plt.xlabel('log radius')
 plt.ylabel('log surface brightness')
+plt.title('sersic profile, showing surface brightness with radius')
 plt.axis([1e-1, 30, 1e-2, 1e3])
 
 #Sersic profile for different sersic profiles.
 plt.savefig('./sersic_profile.png', dpi=300, bbox_inches='tight')
 
 diff = (s1(r) - Ir[9])/s1(r)
+#diff = (Astro_s4(r) - Ir[4])/Astro_s4(r)
 mean_diff = np.mean(diff)
 plt.figure()
 plt.plot(r,diff)
@@ -120,6 +124,9 @@ Re_A = 0.69 #Kpsc0.69
 Ie_A = 26.11
 n_A = 1.80
 
+Ir_n18 = I_R(Ie_A ,r_A ,R_A ,n_A)
+Ir_n5 = I_R(Ie_A ,r_A ,R_A ,5)
+
 r_A = np.arange(0,9,0.01) #in Kpc
 plt.figure()
 plt.plot(r_A,I_R(Ie_A ,r_A ,R_A ,n_A), label = 'Sersic index = 1.8')
@@ -156,7 +163,7 @@ plt.subplot(325)
 plt.plot(M31_fr,np.abs(M31_ft), '.-')
 plt.xlabel('freq (Hz)')
 plt.title('spectrum, abs');
-plt.savefig('./M31 sersic fourier transform.png', dpi=300, bbox_inches='tight')
+plt.savefig('./M31_sersic_fourier_transform.png', dpi=300, bbox_inches='tight')
 
 #Plot a fourier transform of a galaxy twise the size of M31_fr
 M31_ft_2 = np.fft.fftshift(np.fft.fft(Ir_M31_2))
@@ -172,4 +179,34 @@ plt.subplot(325)
 plt.plot(M31_fr,np.abs(M31_ft_2), '.-')
 plt.xlabel('freq (Hz)')
 plt.title('spectrum, abs');
-plt.savefig('./M31x2 sersic fourier transform.png', dpi=300, bbox_inches='tight')
+plt.savefig('./M31x2_sersic_fourier_transform.png', dpi=300, bbox_inches='tight')
+
+#graph for sersic profile of M31 n=1.8
+M31_ft_3 = np.fft.fftshift(np.fft.fft(Ir_n18))
+
+plt.figure(figsize=(20,12))
+plt.subplot(321)
+plt.plot(r_A,Ir_n18,'.-')
+plt.xlabel('time (secs)')
+plt.title('Sersic profile for a galaxy M31 with n = 1.8')
+
+plt.subplot(325)
+plt.plot(M31_fr,np.abs(M31_ft_3), '.-')
+plt.xlabel('freq (Hz)')
+plt.title('spectrum, abs');
+plt.savefig('./M31n18_sersic_fourier_transform.png', dpi=300, bbox_inches='tight')
+
+#graph for sersic profile of M31 n=5
+M31_ft_4 = np.fft.fftshift(np.fft.fft(Ir_n5))
+
+plt.figure(figsize=(20,12))
+plt.subplot(321)
+plt.plot(r_A,Ir_n5,'.-')
+plt.xlabel('time (secs)')
+plt.title('Sersic profile for a galaxy M31 with n = 1.8')
+
+plt.subplot(325)
+plt.plot(M31_fr,np.abs(M31_ft_4), '.-')
+plt.xlabel('freq (Hz)')
+plt.title('spectrum, abs');
+plt.savefig('./M31n5_sersic_fourier_transform.png', dpi=300, bbox_inches='tight')
