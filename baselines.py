@@ -11,57 +11,17 @@ i = j = 0
 
 long_diff = np.zeros((len(long),len(long)))
 
-for i in range(len(long)):
-    long_diff[0,i] = long[0] - long[i]
-
-for i in range(len(long)):
-    long_diff[1,i] = long[1] - long[i]
-
-for i in range(len(long)):
-    long_diff[2,i] = long[2] - long[i]
-
-for i in range(len(long)):
-    long_diff[3,i] = long[3] - long[i]
-
-for i in range(len(long)):
-    long_diff[4,i] = long[4] - long[i]
-
-for i in range(len(long)):
-    long_diff[5,i] = long[5] - long[i]
-
-for i in range(len(long)):
-    long_diff[6,i] = long[6] - long[i]
-
-for i in range(len(long)):
-    long_diff[7,i] = long[7] - long[i]
+for j in range(len(long)):
+    for i in range(len(long)):
+        long_diff[j,i] = long[j] - long[i]
 
 long_dist_diff = 2*earth_rad*np.sin(long_diff/2)
 
 lat_diff = np.zeros((len(long),len(long)))
 
-for i in range(len(long)):
-    lat_diff[0,i] = lat[0] - lat[i]
-
-for i in range(len(long)):
-    lat_diff[1,i] = lat[1] - lat[i]
-
-for i in range(len(long)):
-    lat_diff[2,i] = lat[2] - lat[i]
-
-for i in range(len(long)):
-    lat_diff[3,i] = lat[3] - lat[i]
-
-for i in range(len(long)):
-    lat_diff[4,i] = lat[4] - lat[i]
-
-for i in range(len(long)):
-    lat_diff[5,i] = lat[5] - lat[i]
-
-for i in range(len(long)):
-    lat_diff[6,i] = lat[6] - lat[i]
-
-for i in range(len(long)):
-    lat_diff[7,i] = lat[7] - lat[i]
+for j in range(len(long)):
+    for i in range(len(long)):
+        lat_diff[j,i] = long[j] - long[i]
 
 lat_dist_diff = 2*earth_rad*np.sin(lat_diff/2)
 
