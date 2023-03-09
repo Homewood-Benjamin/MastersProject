@@ -92,9 +92,10 @@ ang_size = np.log10(206265*((1.4*10**9)/10**(bin))) #[arcseconds]
 #Define figure
 fig, ax1 = plt.subplots()
 bin = np.array([2.00,2.25,2.50,2.75,3.00,3.25,3.50,3.75,4.00,4.25,4.50,4.75,5.00,5.25,5.50,5.75])
-vla_freq = plt.hist(vla_baselines)
+#vla_freq = plt.hist(vla_baselines)
 #vla_freq = vla_freq[0]
-ax1.hist(vla_baselines, bins = bin, weights = np.sqrt(vla_freq))
+
+ax1.hist(vla_baselines, bins = bin)
 ax1.hist(e_merlin_baselines, bins = bin)
 plt.xlabel('Log10(baseline length [m])')
 ax2 = ax1.twiny()
