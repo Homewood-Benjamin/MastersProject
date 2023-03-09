@@ -2,6 +2,7 @@ import numpy as np
 from astropy.modeling.models import Sersic1D
 import matplotlib.pyplot as plt
 from scipy.special import gammaincinv
+from sersic_func import sersic
 print("Hello World")
 #This is the inbuilt function based from astropy
 
@@ -27,21 +28,10 @@ plt.title('Astropy: sersic profile, showing surface brightness with radius')
 plt.legend(loc = 'best')
 plt.savefig('./sersic_profile_function.png', dpi=300, bbox_inches='tight')
 
-#own made function
-
-def sersic(r, r0, n, A0):
-
-    # bn = 1.9992*n - 0.3271
-    # bn = 2*n - 1./3. + (4. / 405.*n) + (46./2551.*n*n) + (131. / 1148175*n*n*n) - (2194697. / 30690717750*n*n*n*n)
-    # I = A0*np.exp(-bn*((r/r0)**(1/n)-1))
-
-    I = A0 * np.exp(-gammaincinv(2 * n, 0.5) * ((r / r0) ** (1 / n) - 1) )
-
-    return I
-
 r = np.linspace(0, 5, 1024)
 r0 = 1
 A0 = 1
+## potting the difference plot ##
 
 plt.figure(1, figsize=(2*4.5, 3.75))
 for n in [1, 2, 3, 4]:
@@ -69,18 +59,19 @@ plt.subplots_adjust(wspace=0.3)
 plt.show()
 
 ###
+
 def I_R(Ie,R,Re,n):
     bn = 1.9992*n - 0.3271 #change to longer approx / or use b for n=4
     I = Ie*np.exp(-bn*((R/Re)**(1/n)-1))
     return I
 
 Ir = np.zeros((10,len(r)))
-
+plt.figure()
 for i in range(1,10):
-  Ir[i,:]= (I_R(1,r,1,i))
-  plt.plot(r,I_R(1,r,1,i))
-  plt.xscale('log')
-  plt.yscale('log')
+    Ir[i,:]= (sersic(r,1,i,1))
+    plt.plot(r,sersic(r,1,i,1))
+    plt.xscale('log')
+    plt.yscale('log')
 
 plt.xlabel('log radius')
 plt.ylabel('log surface brightness')
@@ -112,7 +103,8 @@ n_A = 1.80
 
 r_A = np.arange(0,9,0.01) #in Kpc
 plt.figure()
-Ir_M31 = I_R(Ie_A ,r_A ,R_A ,n_A)
+Ir_M31 = sersic(r_A ,R_A,n_A,Ie_A)
+Ir_M31 = sersic(r_A,R_A,n_A,Ie_A)
 plt.plot(r_A,Ir_M31)
 
 plt.xlabel('radius')
@@ -130,7 +122,7 @@ n_A = 1.80
 
 r_A = np.arange(0,9,0.01) #in Kpc
 
-Ir_M31_2 = I_R(Ie_A ,r_A ,R_A ,n_A)
+Ir_M31_2 = sersic(r_A ,R_A ,n_A,Ie_A)
 
 plt.plot(r_A,Ir_M31_2, label = '2 times RA')
 plt.legend(loc = 'best')
@@ -138,7 +130,7 @@ plt.legend(loc = 'best')
 plt.xlabel('radius')
 plt.ylabel('surface brightness')
 plt.title('Sersic Profile for M31_double_R_A')
-#plt.savefig('./sersic_profile_double.png', dpi=300, bbox_inches='tight')
+plt.savefig('./sersic_profile_double.png', dpi=300, bbox_inches='tight')
 
 #example for a galaxy four times as large as Andromeda
 
@@ -149,7 +141,7 @@ n_A = 1.80
 
 r_A = np.arange(0,9,0.01) #in Kpc
 #plt.figure()
-plt.plot(r_A,I_R(Ie_A ,r_A ,R_A ,n_A), label = '4 times RA')
+plt.plot(r_A,sersic(r_A ,R_A ,n_A,Ie_A), label = '4 times RA')
 plt.legend(loc = 'best')
 
 plt.xlabel('radius')
@@ -165,16 +157,17 @@ Re_A = 0.69 #Kpsc0.69
 Ie_A = 26.11
 n_A = 1.80
 
-Ir_n18 = I_R(Ie_A ,r_A ,R_A ,n_A)
-Ir_n5 = I_R(Ie_A ,r_A ,R_A ,5)
+Ir_n18 = sersic(r_A ,R_A ,n_A,Ie_A )
+Ir_n5 = sersic(r_A ,R_A ,5,Ie_A)
 
 r_A = np.arange(0,9,0.01) #in Kpc
+
 plt.figure()
-plt.plot(r_A,I_R(Ie_A ,r_A ,R_A ,n_A), label = 'Sersic index = 1.8')
-plt.plot(r_A,I_R(Ie_A ,r_A ,R_A ,2), label = 'Sersic index = 2')
-plt.plot(r_A,I_R(Ie_A ,r_A ,R_A ,5), label = 'Sersic index = 5')
-plt.plot(r_A,I_R(Ie_A ,r_A ,R_A ,7), label = 'Sersic index = 7')
-plt.plot(r_A,I_R(Ie_A ,r_A ,R_A ,9), label = 'Sersic index = 9')
+plt.plot(r_A,sersic(r_A ,R_A ,n_A,Ie_A), label = 'Sersic index = 1.8')
+plt.plot(r_A,sersic(r_A ,R_A ,2,Ie_A), label = 'Sersic index = 2')
+plt.plot(r_A,sersic(r_A ,R_A ,5,Ie_A), label = 'Sersic index = 5')
+plt.plot(r_A,sersic(r_A ,R_A ,7,Ie_A), label = 'Sersic index = 7')
+plt.plot(r_A,sersic(r_A ,R_A ,9,Ie_A), label = 'Sersic index = 9')
 
 plt.legend(loc = 'best')
 plt.yscale('log')
@@ -262,16 +255,6 @@ import matplotlib.pyplot as plt
 
 plt.close('all')
 
-def sersic(r, r0, n, A0):
-
-    # bn = 1.9992*n - 0.3271
-    # bn = 2*n - 1./3. + (4. / 405.*n) + (46./2551.*n*n) + (131. / 1148175*n*n*n) - (2194697. / 30690717750*n*n*n*n)
-    # I = A0*np.exp(-bn*((r/r0)**(1/n)-1))
-
-    I = A0 * np.exp(-gammaincinv(2 * n, 0.5) * ((r / r0) ** (1 / n) - 1) )
-
-    return I
-
 r = np.linspace(0, 5, 1024)
 r0 = 1
 A0 = 1
@@ -279,7 +262,7 @@ A0 = 1
 plt.figure(1, figsize=(2*4.5, 3.75))
 for n in [1, 2, 3, 4]:
 
-    sersic_ih = sersic(r, r0, n, A0)
+    sersic_ih = sersic(A0, r, r0, n)
     sersic_ast = Sersic1D(amplitude=A0, r_eff=r0, n=n)(r)
 
     plt.subplot(121)
