@@ -93,7 +93,6 @@ lam = (3.0*10**8)/(1.4*10**9) #[Hz]
 fig, ax1 = plt.subplots()
 
 bin = np.array([2.00,2.25,2.50,2.75,3.00,3.25,3.50,3.75,4.00,4.25,4.50,4.75,5.00,5.25,5.50,5.75])
-ang_size = np.log10(((3600 * 360)/2*np.pi) * (lam/(10**bin)))#[arcseconds]
 
 from astropy import units
 
@@ -178,20 +177,88 @@ M31_fr_pos_5 = M31_fr[pos_5]
 M31_ft_pos_5 = M31_ft_5[pos_5]/max(M31_ft_5[pos_5]) #Normalised
 
 fig, ax1 = plt.subplots()
-ax1.plot(M31_fr_pos,np.abs(M31_ft_pos), label = 'r = RA' ,color = 'black')
-ax1.plot(M31_fr_pos_2,np.abs(M31_ft_pos_2), label = 'r = 2RA' ,color = 'blue')
-ax1.plot(M31_fr_pos_3,np.abs(M31_ft_pos_3), label = 'r = 3RA' ,color = 'green')
-ax1.plot(M31_fr_pos_4,np.abs(M31_ft_pos_4), label = 'r = 4RA', color = 'red')
-ax1.plot(M31_fr_pos_5,np.abs(M31_ft_pos_5), label = 'r = 5RA' ,color = 'orange')
 
-#ax1.hist(vla_baselines, bins = bin,density = 'F', label = 'VLA', color = 'C0')
-#ax1.hist(e_merlin_baselines, bins = bin ,density = 'F', label = 'E-merlin',color = 'C1')
+ang_size_vla_baselines = (lam / 10**vla_baselines)*((3600 * 180)/np.pi)
+ang_size_e_merlin_baselines = (lam / 10**e_merlin_baselines)*((3600 * 180)/np.pi)
+ang_size_bin = (lam / 10**bin)*((3600 * 180)/np.pi)
+ax1.hist(ang_size_vla_baselines, bins = ang_size_bin[::-1], label = 'VLA', color = 'C0')
+ax1.hist(ang_size_e_merlin_baselines,bins = ang_size_bin[::-1], label = 'E-merlin',color = 'C1')
+
+
+plt.xscale('log')
+
+
+ax1.plot(M31_fr_pos,175*np.abs(M31_ft_pos), label = 'r = RA' ,color = 'black')
+ax1.plot(M31_fr_pos_2,175*np.abs(M31_ft_pos_2), label = 'r = 2RA' ,color = 'blue')
+ax1.plot(M31_fr_pos_3,175*np.abs(M31_ft_pos_3), label = 'r = 3RA' ,color = 'green')
+ax1.plot(M31_fr_pos_4,175*np.abs(M31_ft_pos_4), label = 'r = 4RA', color = 'red')
+ax1.plot(M31_fr_pos_5,175*np.abs(M31_ft_pos_5), label = 'r = 5RA' ,color = 'orange')
+
+#plt.xlim(0,50)
+#plt.ylim(0,175)
 plt.legend(loc = 'best')
-
 plt.xlabel('Arcseconds')
 plt.ylabel('Normalised Brightness')
 
 plt.savefig('./fourier_baselines.png', dpi=300, bbox_inches='tight')
+
+##-----------------changing the sersic index-------------
+
+Ir_M31 = sersic(r_A,R_A,n_A,Ie_A)
+Ir_M31_n2 = sersic(r_A ,R_A ,2,Ie_A)
+Ir_M31_n3 = sersic(r_A ,R_A ,3,Ie_A)
+Ir_M31_n4 = sersic(r_A ,R_A ,4,Ie_A)
+Ir_M31_n5 = sersic(r_A ,R_A ,5,Ie_A)
+
+M31_fr = np.fft.fftshift(np.fft.fftfreq(n, dr))
+M31_ft_n = np.fft.fftshift(np.fft.fft(Ir_M31))
+M31_ft_2n = np.fft.fftshift(np.fft.fft(Ir_M31_n2))
+M31_ft_3n = np.fft.fftshift(np.fft.fft(Ir_M31_n3))
+M31_ft_4n = np.fft.fftshift(np.fft.fft(Ir_M31_n4))
+M31_ft_5n = np.fft.fftshift(np.fft.fft(Ir_M31_n5))
+
+pos_n = np.argwhere(M31_fr>0)
+M31_fr_pos_n = M31_fr[pos]
+M31_ft_pos_n = M31_ft_n[pos_n]/max(M31_ft_n[pos_n]) #Normalised
+
+pos_2n = np.argwhere(M31_fr>0)
+M31_fr_pos_2n = M31_fr[pos_2n]
+M31_ft_pos_2n = M31_ft_2n[pos]/max(M31_ft_2n[pos_2n]) #Normalised
+
+pos_3n = np.argwhere(M31_fr>0)
+M31_fr_pos_3n = M31_fr[pos_3n]
+M31_ft_pos_3n = M31_ft_3n[pos_3n]/max(M31_ft_3n[pos_3n]) #Normalised
+
+pos_4n = np.argwhere(M31_fr>0)
+M31_fr_pos_4n = M31_fr[pos_4n]
+M31_ft_pos_4n = M31_ft_4n[pos_4n]/max(M31_ft_4n[pos_4n]) #Normalised
+
+pos_5n = np.argwhere(M31_fr>0)
+M31_fr_pos_5n = M31_fr[pos_5n]
+M31_ft_pos_5n = M31_ft_5n[pos_5n]/max(M31_ft_5n[pos_5n]) #Normalised
+
+
+plt.figure()
+fig, ax1 = plt.subplots()
+ax1.hist(ang_size_vla_baselines, bins = ang_size_bin[::-1], label = 'VLA', color = 'C0')
+ax1.hist(ang_size_e_merlin_baselines,bins = ang_size_bin[::-1], label = 'E-merlin',color = 'C1')
+
+plt.xscale('log')
+
+
+ax1.plot(M31_fr_pos_n,175*np.abs(M31_ft_pos), label = 'n = 1.8' ,color = 'black')
+ax1.plot(M31_fr_pos_2n,175*np.abs(M31_ft_pos_2n), label = 'n = 2' ,color = 'blue')
+ax1.plot(M31_fr_pos_3n,175*np.abs(M31_ft_pos_3n), label = 'n = 3' ,color = 'green')
+ax1.plot(M31_fr_pos_4n,175*np.abs(M31_ft_pos_4n), label = 'n = 4', color = 'red')
+ax1.plot(M31_fr_pos_5n,175*np.abs(M31_ft_pos_5n), label = 'n = 5' ,color = 'orange')
+
+#plt.xlim(0,50)
+#plt.ylim(0,175)
+plt.legend(loc = 'best')
+plt.xlabel('Arcseconds')
+plt.ylabel('Normalised Brightness')
+
+plt.savefig('./fourier_baselines_n.png', dpi=300, bbox_inches='tight')
 
 #-------------------for my data------------------------
 
