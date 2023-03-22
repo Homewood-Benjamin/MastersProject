@@ -103,9 +103,9 @@ n_A = 1.80
 
 r_A = np.arange(0,9,0.01) #in Kpc
 plt.figure()
-Ir_M31 = sersic(r_A ,R_A,n_A,Ie_A)
 Ir_M31 = sersic(r_A,R_A,n_A,Ie_A)
-plt.plot(r_A,Ir_M31)
+Ir_M31 = sersic(r_A,R_A,n_A,Ie_A)
+plt.plot(r_A,Ir_M31,label = 'r = RA')
 
 plt.xlabel('radius')
 plt.ylabel('surface brightness')
@@ -124,7 +124,7 @@ r_A = np.arange(0,9,0.01) #in Kpc
 
 Ir_M31_2 = sersic(r_A ,R_A ,n_A,Ie_A)
 
-plt.plot(r_A,Ir_M31_2, label = '2 times RA')
+plt.plot(r_A,Ir_M31_2, label = 'r = 2RA')
 plt.legend(loc = 'best')
 
 plt.xlabel('radius')
@@ -141,7 +141,7 @@ n_A = 1.80
 
 r_A = np.arange(0,9,0.01) #in Kpc
 #plt.figure()
-plt.plot(r_A,sersic(r_A ,R_A ,n_A,Ie_A), label = '4 times RA')
+plt.plot(r_A,sersic(r_A ,R_A ,n_A,Ie_A), label = 'r = 4RA')
 plt.legend(loc = 'best')
 
 plt.xlabel('radius')
@@ -190,12 +190,16 @@ M31_ft = np.fft.fftshift(np.fft.fft(Ir_M31))
 plt.figure(figsize=(20,12))
 plt.subplot(321)
 plt.plot(r_A,Ir_M31,'.-')
-plt.xlabel('time (secs)')
+plt.xlabel('Distance [Kpc]')
 plt.title('Sersic profile for M31')
 
+pos = np.argwhere(M31_fr>0)
+M31_fr_pos = M31_fr[pos]
+M31_ft_pos = M31_ft[pos]
+
 plt.subplot(325)
-plt.plot(M31_fr,np.abs(M31_ft), '.-')
-plt.xlabel('freq (Hz)')
+plt.plot(M31_fr_pos,np.abs(M31_ft_pos), '.-')
+plt.xlabel('arcseconds^-1')
 plt.title('spectrum, abs');
 plt.savefig('./M31_sersic_fourier_transform.png', dpi=300, bbox_inches='tight')
 
@@ -206,12 +210,12 @@ M31_ft_2 = np.fft.fftshift(np.fft.fft(Ir_M31_2))
 plt.figure(figsize=(20,12))
 plt.subplot(321)
 plt.plot(r_A,Ir_M31_2,'.-')
-plt.xlabel('time (secs)')
+plt.xlabel('Distance [Kpc]')
 plt.title('Sersic profile for a galaxy twise the radius of M31')
 
 plt.subplot(325)
 plt.plot(M31_fr,np.abs(M31_ft_2), '.-')
-plt.xlabel('freq (Hz)')
+plt.xlabel('arcseconds^-2')
 plt.title('spectrum, abs');
 
 plt.savefig('./M31x2_sersic_fourier_transform.png', dpi=300, bbox_inches='tight')
@@ -222,12 +226,12 @@ M31_ft_3 = np.fft.fftshift(np.fft.fft(Ir_n18))
 plt.figure(figsize=(20,12))
 plt.subplot(321)
 plt.plot(r_A,Ir_n18,'.-')
-plt.xlabel('time (secs)')
+plt.xlabel('Distance [Kpc]')
 plt.title('Sersic profile for a galaxy M31 with n = 1.8')
 
 plt.subplot(325)
 plt.plot(M31_fr,np.abs(M31_ft_3), '.-')
-plt.xlabel('freq (Hz)')
+plt.xlabel('arcseconds^-2')
 plt.title('spectrum, abs');
 plt.savefig('./M31n18_sersic_fourier_transform.png', dpi=300, bbox_inches='tight')
 
@@ -237,12 +241,12 @@ M31_ft_4 = np.fft.fftshift(np.fft.fft(Ir_n5))
 plt.figure(figsize=(20,12))
 plt.subplot(321)
 plt.plot(r_A,Ir_n5,'.-')
-plt.xlabel('time (secs)')
+plt.xlabel('Distance [Kpc]')
 plt.title('Sersic profile for a galaxy M31 with n = 1.8')
 
 plt.subplot(325)
 plt.plot(M31_fr,np.abs(M31_ft_4), '.-')
-plt.xlabel('freq (Hz)')
+plt.xlabel('arcseconds^-2')
 plt.title('spectrum, abs');
 plt.savefig('./M31n5_sersic_fourier_transform.png', dpi=300, bbox_inches='tight')
 
