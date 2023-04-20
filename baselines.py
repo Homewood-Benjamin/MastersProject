@@ -293,3 +293,61 @@ plt.ylabel('Number of baselines)')
 plt.title('Baslines of E-merlin')
 
 plt.savefig('./baselines_E-merlin.png', dpi=300, bbox_inches='tight')
+
+#----------------------------------------------------------------------------##
+#in_bin = np.zeros((len(ang_size_bin)))
+
+in_bin0 = np.argwhere((M31_fr_pos<ang_size_bin[0]) & (M31_fr_pos>ang_size_bin[1]))
+in_bin1 = np.argwhere((M31_fr_pos<ang_size_bin[1]) & (M31_fr_pos>ang_size_bin[2]))
+in_bin2 = np.argwhere((M31_fr_pos<ang_size_bin[2]) & (M31_fr_pos>ang_size_bin[3]))
+in_bin3 = np.argwhere((M31_fr_pos<ang_size_bin[3]) & (M31_fr_pos>ang_size_bin[4]))
+in_bin4 = np.argwhere((M31_fr_pos<ang_size_bin[4]) & (M31_fr_pos>ang_size_bin[5]))
+in_bin5 = np.argwhere((M31_fr_pos<ang_size_bin[5]) & (M31_fr_pos>ang_size_bin[6]))
+in_bin6 = np.argwhere((M31_fr_pos<ang_size_bin[6]) & (M31_fr_pos>ang_size_bin[7]))
+in_bin7 = np.argwhere((M31_fr_pos<ang_size_bin[7]) & (M31_fr_pos>ang_size_bin[8]))
+in_bin8 = np.argwhere((M31_fr_pos<ang_size_bin[8]) & (M31_fr_pos>ang_size_bin[9]))
+in_bin9 = np.argwhere((M31_fr_pos<ang_size_bin[9]) & (M31_fr_pos>ang_size_bin[10]))
+in_bin10 = np.argwhere((M31_fr_pos<ang_size_bin[10]) & (M31_fr_pos>ang_size_bin[11]))
+in_bin11 = np.argwhere((M31_fr_pos<ang_size_bin[11]) & (M31_fr_pos>ang_size_bin[12]))
+in_bin12 = np.argwhere((M31_fr_pos<ang_size_bin[12]) & (M31_fr_pos>ang_size_bin[13]))
+in_bin13 = np.argwhere((M31_fr_pos<ang_size_bin[13]) & (M31_fr_pos>ang_size_bin[14]))
+in_bin14 = np.argwhere((M31_fr_pos<ang_size_bin[14]) & (M31_fr_pos>ang_size_bin[15]))
+in_bin15 = np.argwhere(M31_fr_pos<ang_size_bin[15])
+
+inbin = np.array([in_bin0,in_bin1,in_bin2,in_bin3,in_bin4,in_bin5,in_bin6,in_bin7,in_bin8,in_bin9,in_bin10,in_bin11,in_bin12,in_bin13,in_bin14])
+
+vla_height = ax1.hist(ang_size_vla_baselines, bins = ang_size_bin[::-1], label = 'VLA', color = 'C0')[0]
+def error(N):
+    aprox_error = 420/(0.805*np.sqrt(2*N*(N-1)))
+    return aprox_error
+vla_error_aprox = np.zeros(len(vla_height))
+
+for i in range(len(vla_height)):
+    vla_error_aprox[i] = error(vla_height[i])
+
+
+
+w_M31_fr_pos0 = vla_error_aprox[0]*M31_fr_pos[inbin[0][:,0]] #y-axis
+w_M31_fr_pos1 = vla_error_aprox[1]*M31_fr_pos[inbin[1][:,0]] #y-axis
+w_M31_fr_pos2 = vla_error_aprox[2]*M31_fr_pos[inbin[2][:,0]] #y-axis
+w_M31_fr_pos3 = vla_error_aprox[3]*M31_fr_pos[inbin[3][:,0]] #y-axis
+w_M31_fr_pos4 = vla_error_aprox[4]*M31_fr_pos[inbin[4][:,0]] #y-axis
+w_M31_fr_pos5 = vla_error_aprox[5]*M31_fr_pos[inbin[5][:,0]] #y-axis
+w_M31_fr_pos6 = vla_error_aprox[6]*M31_fr_pos[inbin[6][:,0]] #y-axis
+w_M31_fr_pos7 = vla_error_aprox[7]*M31_fr_pos[inbin[7][:,0]] #y-axis
+w_M31_fr_pos8 = vla_error_aprox[8]*M31_fr_pos[inbin[8][:,0]] #y-axis
+w_M31_fr_pos9 = vla_error_aprox[9]*M31_fr_pos[inbin[9][:,0]] #y-axis
+w_M31_fr_pos10 = vla_error_aprox[10]*M31_fr_pos[inbin[10][:,0]] #y-axis
+w_M31_fr_pos11 = vla_error_aprox[11]*M31_fr_pos[inbin[11][:,0]] #y-axis
+w_M31_fr_pos12 = vla_error_aprox[12]*M31_fr_pos[inbin[12][:,0]] #y-axis
+w_M31_fr_pos13 = vla_error_aprox[13]*M31_fr_pos[inbin[13][:,0]] #y-axis
+w_M31_fr_pos14 = vla_error_aprox[14]*M31_fr_pos[inbin[14][:,0]] #y-axis
+
+w_M31_fr_pos = np.concatenate((w_M31_fr_pos0,w_M31_fr_pos1,w_M31_fr_pos2,w_M31_fr_pos3,w_M31_fr_pos4,w_M31_fr_pos5,w_M31_fr_pos6,w_M31_fr_pos7,w_M31_fr_pos8,w_M31_fr_pos9,w_M31_fr_pos10,w_M31_fr_pos11,w_M31_fr_pos12,w_M31_fr_pos13,w_M31_fr_pos14))
+
+plt.figure()
+plt.xscale('log')
+plt.plot(M31_ft_pos,w_M31_fr_pos)
+plt.xlabel('arcseconds')
+plt.ylabel('Intensity')
+plt.savefig('./weighted_baselines_VLA.png', dpi=300, bbox_inches='tight')
