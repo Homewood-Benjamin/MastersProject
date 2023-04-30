@@ -194,7 +194,7 @@ ax1.plot(M31_fr_pos_3,175*np.abs(M31_ft_pos_3), label = 'r = 3RA' ,color = 'gree
 ax1.plot(M31_fr_pos_4,175*np.abs(M31_ft_pos_4), label = 'r = 4RA', color = 'red')
 ax1.plot(M31_fr_pos_5,175*np.abs(M31_ft_pos_5), label = 'r = 5RA' ,color = 'orange')
 
-#plt.xlim(0,50)
+#plt.xlim(0,10)
 #plt.ylim(0,175)
 plt.legend(loc = 'best')
 plt.xlabel('Arcseconds')
@@ -318,7 +318,7 @@ inbin = np.array([in_bin0,in_bin1,in_bin2,in_bin3,in_bin4,in_bin5,in_bin6,in_bin
 
 vla_height = ax1.hist(ang_size_vla_baselines, bins = ang_size_bin[::-1], label = 'VLA', color = 'C0')[0]
 def error(N):
-    aprox_error = 420/(0.805*np.sqrt(2*N*(N-1)))
+    aprox_error = 420/(0.805*np.sqrt(2*N*(N-1))) #add a time of 24hrs in sec
     return aprox_error
 vla_error_aprox = np.zeros(len(vla_height))
 
@@ -327,27 +327,190 @@ for i in range(len(vla_height)):
 
 
 
-w_M31_fr_pos0 = vla_error_aprox[0]*M31_fr_pos[inbin[0][:,0]] #y-axis
-w_M31_fr_pos1 = vla_error_aprox[1]*M31_fr_pos[inbin[1][:,0]] #y-axis
-w_M31_fr_pos2 = vla_error_aprox[2]*M31_fr_pos[inbin[2][:,0]] #y-axis
-w_M31_fr_pos3 = vla_error_aprox[3]*M31_fr_pos[inbin[3][:,0]] #y-axis
-w_M31_fr_pos4 = vla_error_aprox[4]*M31_fr_pos[inbin[4][:,0]] #y-axis
-w_M31_fr_pos5 = vla_error_aprox[5]*M31_fr_pos[inbin[5][:,0]] #y-axis
-w_M31_fr_pos6 = vla_error_aprox[6]*M31_fr_pos[inbin[6][:,0]] #y-axis
-w_M31_fr_pos7 = vla_error_aprox[7]*M31_fr_pos[inbin[7][:,0]] #y-axis
-w_M31_fr_pos8 = vla_error_aprox[8]*M31_fr_pos[inbin[8][:,0]] #y-axis
-w_M31_fr_pos9 = vla_error_aprox[9]*M31_fr_pos[inbin[9][:,0]] #y-axis
-w_M31_fr_pos10 = vla_error_aprox[10]*M31_fr_pos[inbin[10][:,0]] #y-axis
-w_M31_fr_pos11 = vla_error_aprox[11]*M31_fr_pos[inbin[11][:,0]] #y-axis
-w_M31_fr_pos12 = vla_error_aprox[12]*M31_fr_pos[inbin[12][:,0]] #y-axis
-w_M31_fr_pos13 = vla_error_aprox[13]*M31_fr_pos[inbin[13][:,0]] #y-axis
-w_M31_fr_pos14 = vla_error_aprox[14]*M31_fr_pos[inbin[14][:,0]] #y-axis
+w_M31_fr_pos0 = vla_error_aprox[0]+M31_ft_pos[inbin[0][:,0]] #y-axis
+w_M31_fr_pos1 = vla_error_aprox[1]+M31_ft_pos[inbin[1][:,0]] #y-axis
+w_M31_fr_pos2 = vla_error_aprox[2]+M31_ft_pos[inbin[2][:,0]] #y-axis
+w_M31_fr_pos3 = vla_error_aprox[3]+M31_ft_pos[inbin[3][:,0]] #y-axis
+w_M31_fr_pos4 = vla_error_aprox[4]+M31_ft_pos[inbin[4][:,0]] #y-axis
+w_M31_fr_pos5 = vla_error_aprox[5]+M31_ft_pos[inbin[5][:,0]] #y-axis
+w_M31_fr_pos6 = vla_error_aprox[6]+M31_ft_pos[inbin[6][:,0]] #y-axis
+w_M31_fr_pos7 = vla_error_aprox[7]+M31_ft_pos[inbin[7][:,0]] #y-axis
+w_M31_fr_pos8 = vla_error_aprox[8]+M31_ft_pos[inbin[8][:,0]] #y-axis
+w_M31_fr_pos9 = vla_error_aprox[9]+M31_ft_pos[inbin[9][:,0]] #y-axis
+w_M31_fr_pos10 = vla_error_aprox[10]+M31_ft_pos[inbin[10][:,0]] #y-axis
+w_M31_fr_pos11 = vla_error_aprox[11]+M31_ft_pos[inbin[11][:,0]] #y-axis
+w_M31_fr_pos12 = vla_error_aprox[12]+M31_ft_pos[inbin[12][:,0]] #y-axis
+w_M31_fr_pos13 = vla_error_aprox[13]+M31_ft_pos[inbin[13][:,0]] #y-axis
+w_M31_fr_pos14 = vla_error_aprox[14]+M31_ft_pos[inbin[14][:,0]] #y-axis
 
-w_M31_fr_pos = np.concatenate((w_M31_fr_pos0,w_M31_fr_pos1,w_M31_fr_pos2,w_M31_fr_pos3,w_M31_fr_pos4,w_M31_fr_pos5,w_M31_fr_pos6,w_M31_fr_pos7,w_M31_fr_pos8,w_M31_fr_pos9,w_M31_fr_pos10,w_M31_fr_pos11,w_M31_fr_pos12,w_M31_fr_pos13,w_M31_fr_pos14))
+w_M31_ft_pos = np.concatenate((w_M31_fr_pos0,w_M31_fr_pos1,w_M31_fr_pos2,w_M31_fr_pos3,w_M31_fr_pos4,w_M31_fr_pos5,w_M31_fr_pos6,w_M31_fr_pos7,w_M31_fr_pos8,w_M31_fr_pos9,w_M31_fr_pos10,w_M31_fr_pos11,w_M31_fr_pos12,w_M31_fr_pos13,w_M31_fr_pos14))
+
+#w_M31_fr_pos = np.zeros(len(vla_height))
+#for i in range(len(vla_height)):
+    #w_M31_fr_pos[i] = vla_error_aprox[i]+M31_ft_pos[inbin[i][:,0]] #y-axis
+
+
 
 plt.figure()
 plt.xscale('log')
-plt.plot(M31_ft_pos,w_M31_fr_pos)
+plt.plot(M31_fr_pos,w_M31_ft_pos)
 plt.xlabel('arcseconds')
 plt.ylabel('Intensity')
 plt.savefig('./weighted_baselines_VLA.png', dpi=300, bbox_inches='tight')
+
+##---------attampt at 'weighting' the sersic profile with errors---------------------------------------------------##
+
+#ang_size_bin = ang_size_bin[::-1]
+
+mid_point = 10**(bin+(0.25/2))
+mid_point_ang = (lam / mid_point)*((3600 * 180)/np.pi)
+mid_point_ang = mid_point_ang[::-1]
+
+
+bin_range = np.zeros((len(bin),2))
+
+for i in range(len(bin)):
+    bin_range[i,0] = bin[i]
+for i in range(len(bin)-1):
+    bin_range[i,1] = bin[i+1]
+
+bin_range = 10**(bin_range)
+bin_range[-1,-1] = 0
+
+bin_range_ang = (lam / 10**bin_range)*((3600 * 180)/np.pi)
+
+#M31_fr_pos_ang = (lam / 10**M31_fr_pos)*((3600 * 180)/np.pi)
+
+sersic_X_b0 = np.argwhere((M31_fr_pos>ang_size_bin[::-1][0]) & (M31_fr_pos<ang_size_bin[::-1][1]))
+sersic_X_b1 = np.argwhere((M31_fr_pos>ang_size_bin[::-1][1]) & (M31_fr_pos<ang_size_bin[::-1][2]))
+sersic_X_b2 = np.argwhere((M31_fr_pos>ang_size_bin[::-1][2]) & (M31_fr_pos<ang_size_bin[::-1][3]))
+sersic_X_b3 = np.argwhere((M31_fr_pos>ang_size_bin[::-1][3]) & (M31_fr_pos<ang_size_bin[::-1][4]))
+sersic_X_b4 = np.argwhere((M31_fr_pos>ang_size_bin[::-1][4]) & (M31_fr_pos<ang_size_bin[::-1][5]))
+sersic_X_b5 = np.argwhere((M31_fr_pos>ang_size_bin[::-1][5]) & (M31_fr_pos<ang_size_bin[::-1][6]))
+sersic_X_b6 = np.argwhere((M31_fr_pos>ang_size_bin[::-1][6]) & (M31_fr_pos<ang_size_bin[::-1][7]))
+sersic_X_b7 = np.argwhere((M31_fr_pos>ang_size_bin[::-1][7]) & (M31_fr_pos<ang_size_bin[::-1][8]))
+sersic_X_b8 = np.argwhere((M31_fr_pos>ang_size_bin[::-1][8]) & (M31_fr_pos<ang_size_bin[::-1][9]))
+sersic_X_b9 = np.argwhere((M31_fr_pos>ang_size_bin[::-1][9]) & (M31_fr_pos<ang_size_bin[::-1][10]))
+sersic_X_b10 = np.argwhere((M31_fr_pos>ang_size_bin[::-1][10]) & (M31_fr_pos<ang_size_bin[::-1][11]))
+sersic_X_b11 = np.argwhere((M31_fr_pos>ang_size_bin[::-1][11]) & (M31_fr_pos<ang_size_bin[::-1][12]))
+sersic_X_b12 = np.argwhere((M31_fr_pos>ang_size_bin[::-1][12]) & (M31_fr_pos<ang_size_bin[::-1][13]))
+sersic_X_b13 = np.argwhere((M31_fr_pos>ang_size_bin[::-1][13]) & (M31_fr_pos<ang_size_bin[::-1][14]))
+sersic_X_b14 = np.argwhere((M31_fr_pos>ang_size_bin[::-1][14]) & (M31_fr_pos<ang_size_bin[::-1][15]))
+
+
+in_bin_0 =  M31_fr_pos[sersic_X_b0][:,0]
+in_bin_1 =  M31_fr_pos[sersic_X_b1][:,0]
+in_bin_2 =  M31_fr_pos[sersic_X_b2][:,0]
+in_bin_3 =  M31_fr_pos[sersic_X_b3][:,0]
+in_bin_4 =  M31_fr_pos[sersic_X_b4][:,0]
+in_bin_5 =  M31_fr_pos[sersic_X_b5][:,0]
+in_bin_6 =  M31_fr_pos[sersic_X_b6][:,0]
+in_bin_7 =  M31_fr_pos[sersic_X_b7][:,0]
+in_bin_8 =  M31_fr_pos[sersic_X_b8][:,0]
+in_bin_9 =  M31_fr_pos[sersic_X_b9][:,0]
+in_bin_10 =  M31_fr_pos[sersic_X_b10][:,0]
+in_bin_11 =  M31_fr_pos[sersic_X_b11][:,0]
+in_bin_12 =  M31_fr_pos[sersic_X_b12][:,0]
+in_bin_13 =  M31_fr_pos[sersic_X_b13][:,0]
+in_bin_14 =  M31_fr_pos[sersic_X_b14][:,0]
+
+I_in_bin_0 = np.abs(M31_ft_pos[sersic_X_b0][:,0])
+I_in_bin_1 =  np.abs(M31_ft_pos[sersic_X_b1][:,0])
+I_in_bin_2 =  np.abs(M31_ft_pos[sersic_X_b2][:,0])
+I_in_bin_3 =  np.abs(M31_ft_pos[sersic_X_b3][:,0])
+I_in_bin_4 =  np.abs(M31_ft_pos[sersic_X_b4][:,0])
+I_in_bin_5 =  np.abs(M31_ft_pos[sersic_X_b5][:,0])
+I_in_bin_6 =  np.abs(M31_ft_pos[sersic_X_b6][:,0])
+I_in_bin_7 =  np.abs(M31_ft_pos[sersic_X_b7][:,0])
+I_in_bin_8 =  np.abs(M31_ft_pos[sersic_X_b8][:,0])
+I_in_bin_9 =  np.abs(M31_ft_pos[sersic_X_b9][:,0])
+I_in_bin_10 =  np.abs(M31_ft_pos[sersic_X_b10][:,0])
+I_in_bin_11 =  np.abs(M31_ft_pos[sersic_X_b11][:,0])
+I_in_bin_12 =  np.abs(M31_ft_pos[sersic_X_b12][:,0])
+I_in_bin_13 =  np.abs(M31_ft_pos[sersic_X_b13][:,0])
+I_in_bin_14 =  np.abs(M31_ft_pos[sersic_X_b14][:,0])
+
+I_in_bin = np.concatenate((I_in_bin_0,I_in_bin_1,I_in_bin_2,I_in_bin_3,I_in_bin_4,I_in_bin_5,I_in_bin_6,I_in_bin_7,I_in_bin_8,I_in_bin_9,I_in_bin_10,I_in_bin_11,I_in_bin_12,I_in_bin_13,I_in_bin_14))
+
+index_b0 = len(I_in_bin_0)
+index_b1 = index_b0 + len(I_in_bin_1)
+index_b2 = index_b1 + len(I_in_bin_2)
+index_b3 = index_b2 + len(I_in_bin_3)
+index_b4 = index_b3 + len(I_in_bin_4)
+index_b5 = index_b4 + len(I_in_bin_5)
+index_b6 = index_b5 + len(I_in_bin_6)
+index_b7 = index_b6 + len(I_in_bin_7)
+index_b8 = index_b7 + len(I_in_bin_8)
+index_b9 = index_b8 + len(I_in_bin_9)
+index_b10 = index_b9 + len(I_in_bin_10)
+index_b11 = index_b10 + len(I_in_bin_11)
+index_b12 = index_b11 + len(I_in_bin_12)
+index_b13 = index_b12 + len(I_in_bin_13)
+index_b14 = index_b13 + len(I_in_bin_14)
+
+def dela_I(SEFD,nc,n_p,N,t,v):
+    dI = SEFD/(nc*np.sqrt(n_p*N*(N-1)*t*v))
+    return dI
+
+SEFD = 420 #Jy
+nc = 0.93 #quantum reciver effiency
+n_p = 2 #number of polarisations
+N = vla_height
+t = 86400 #arcseconds
+v = 1 #GHz
+
+VLA_dI = dela_I(SEFD,nc,n_p,N,t,v)
+VLA_dI[0] = VLA_dI[1] = VLA_dI[2] = 0
+
+#rand_err0 = np.random.normal(I_in_bin_0,(VLA_dI[0]/2))
+#rand_err1 = np.random.normal(I_in_bin_1,(VLA_dI[1]/2))
+#rand_err2 = np.random.normal(I_in_bin_2,(VLA_dI[2]/2))
+rand_err3 = np.random.normal(I_in_bin_3,(VLA_dI[3]/2))
+rand_err4 = np.random.normal(I_in_bin_4,(VLA_dI[4]/2))
+rand_err5 = np.random.normal(I_in_bin_5,(VLA_dI[5]/2))
+rand_err6 = np.random.normal(I_in_bin_6,(VLA_dI[6]/2))
+rand_err7 = np.random.normal(I_in_bin_7,(VLA_dI[7]/2))
+rand_err8 = np.random.normal(I_in_bin_8,(VLA_dI[8]/2))
+rand_err9 = np.random.normal(I_in_bin_9,(VLA_dI[9]/2))
+rand_err10 = np.random.normal(I_in_bin_10,(VLA_dI[10]/2))
+rand_err11 = np.random.normal(I_in_bin_11,(VLA_dI[11]/2))
+rand_err12 = np.random.normal(I_in_bin_12,(VLA_dI[12]/2))
+rand_err13 = np.random.normal(I_in_bin_13,(VLA_dI[13]/2))
+rand_err14 = np.random.normal(I_in_bin_14,(VLA_dI[14]/2))
+
+rand_err = np.concatenate((rand_err3,rand_err4,rand_err5,rand_err6,rand_err7,rand_err8,rand_err9,rand_err10,rand_err11,rand_err12,rand_err13,rand_err14))
+rand_err = rand_err[:,0]
+
+#sim_data0 = I_in_bin_0 + rand_err3
+#sim_data1 = I_in_bin_0 + rand_err3
+#sim_data2 = I_in_bin_0 + rand_err3
+sim_data3 = I_in_bin_3 + rand_err3
+sim_data4 = I_in_bin_4 + rand_err4
+sim_data5 = I_in_bin_5 + rand_err5
+sim_data6 = I_in_bin_6 + rand_err6
+sim_data7 = I_in_bin_7 + rand_err7
+sim_data8 = I_in_bin_8 + rand_err8
+sim_data9 = I_in_bin_9 + rand_err9
+sim_data10 = I_in_bin_10 + rand_err10
+sim_data11 = I_in_bin_11 + rand_err11
+sim_data12 = I_in_bin_12 + rand_err12
+sim_data13 = I_in_bin_13 + rand_err13
+sim_data14 = I_in_bin_14 + rand_err14
+
+sim_data = np.concatenate((sim_data3,sim_data4,sim_data5,sim_data6,sim_data7,sim_data8,sim_data9,sim_data10,sim_data11,sim_data12,sim_data13,sim_data14))
+sim_data = sim_data[:,0]
+
+plt.figure()
+plt.errorbar(M31_fr_pos[-446:], 175*sim_data, yerr=175*rand_err, fmt=".k", capsize=0)
+plt.plot(M31_fr_pos,175*M31_ft_pos, 'r')
+#plt.xscale('log')
+
+plt.savefig('./sersic_profile_sim_errors.png', dpi=300, bbox_inches='tight')
+
+##----------------------Guassian liklihood----------------------------------------------##
+
+def log_likelihood(theta, x, y, yerr):
+    m, b, log_f = theta
+    model = m * x + b
+    sigma2 = yerr**2 + model**2 * np.exp(2 * log_f)
+    return -0.5 * np.sum((y - model) ** 2 / sigma2 + np.log(sigma2))
