@@ -119,32 +119,33 @@ M31_ft = np.fft.fftshift(np.fft.fft(Ir_M31))
 #plt.plot(M31_fr,np.abs(M31_ft), '.-')
 
 ax1.hist(vla_baselines, bins = bin, label = 'VLA')
-ax1.hist(e_merlin_baselines, bins = bin, label = 'E-merlin')
+ax1.hist(e_merlin_baselines, bins = bin, label = 'E-merlin', color = "tab:orange")
 plt.legend(loc = 'best')
 ax2 = ax1.twiny()
 ax2.plot(ang_size,bin,'.', alpha = 0)
 plt.xscale('log')
 ax2.invert_xaxis()
-plt.xlabel('Log10 angular size at 1.4GHz')
-plt.ylabel('Number of baselines')
+ax2.set_xlabel('Log10 angular size at 1.4GHz')
+ax1.set_xlabel('Log10(baseline Length [m])')
+ax1.set_ylabel('Number of baselines')
 plt.title('Baslines of E-merlin and VLA')
 
 plt.savefig('./baselines_E-merlin_vla.png', dpi=300, bbox_inches='tight')
-
+#
 #------------------combining the baselines plots with sersic profiles----------------
 ##INFO FOR SERSIC PROFILE/Fourier Transform##
-R_A = 3.167 #arcseconds
-Re_A = 0.69 #Kpsc0.69
+R_A = 33.37 #3.167 #arcseconds
+Re_A = 1.0 # 0.69 #Kpsc0.69
 Ie_A = 26.11
-n_A = 1.80
+n_A = 2 #1.80
 
-r_A = np.arange(0,9,0.01) #in Kpc
+r_A = np.linspace(0,R_A,900) #in Kpc
 
 Ir_M31 = sersic(r_A,R_A,n_A,Ie_A)
-Ir_M31_2 = sersic(r_A ,R_A*2 ,n_A,Ie_A)
-Ir_M31_3 = sersic(r_A ,R_A*3 ,n_A,Ie_A)
-Ir_M31_4 = sersic(r_A ,R_A*4 ,n_A,Ie_A)
-Ir_M31_5 = sersic(r_A ,R_A*5 ,n_A,Ie_A)
+Ir_M31_2 = sersic(r_A ,Re_A*2 ,n_A,Ie_A)
+Ir_M31_3 = sersic(r_A ,Re_A*3 ,n_A,Ie_A)
+Ir_M31_4 = sersic(r_A ,Re_A*4 ,n_A,Ie_A)
+Ir_M31_5 = sersic(r_A ,Re_A*5 ,n_A,Ie_A)
 
 n=len(r_A)                     #number of radius points
 dr=r_A[1]-r_A[0]                 # time interval
@@ -204,11 +205,11 @@ plt.savefig('./fourier_baselines.png', dpi=300, bbox_inches='tight')
 
 ##-----------------changing the sersic index-------------
 
-Ir_M31 = sersic(r_A,R_A,n_A,Ie_A)
-Ir_M31_n2 = sersic(r_A ,R_A ,2,Ie_A)
-Ir_M31_n3 = sersic(r_A ,R_A ,3,Ie_A)
-Ir_M31_n4 = sersic(r_A ,R_A ,4,Ie_A)
-Ir_M31_n5 = sersic(r_A ,R_A ,5,Ie_A)
+Ir_M31 = sersic(r_A,Re_A,1,Ie_A)
+Ir_M31_n2 = sersic(r_A ,Re_A ,2,Ie_A)
+Ir_M31_n3 = sersic(r_A ,Re_A ,3,Ie_A)
+Ir_M31_n4 = sersic(r_A ,Re_A ,4,Ie_A)
+Ir_M31_n5 = sersic(r_A ,Re_A ,5,Ie_A)
 
 M31_fr = np.fft.fftshift(np.fft.fftfreq(n, dr))
 M31_ft_n = np.fft.fftshift(np.fft.fft(Ir_M31))
@@ -289,10 +290,10 @@ r0 = np.log10(r[w_zeros[0],w_zeros[1]])
 plt.figure()
 plt.hist(r0, bins = [2.00,2.25,2.50,2.75,3.00,3.25,3.50,3.75,4.00,4.25,4.50,4.75,5.00,5.25,5.50,5.75])
 plt.xlabel('Log10(baseline length [m])')
-plt.ylabel('Number of baselines)')
+plt.ylabel('Number of baselines')
 plt.title('Baslines of E-merlin')
 
-plt.savefig('./baselines_E-merlin.png', dpi=300, bbox_inches='tight')
+plt.savefig('./baselines_E-merlin_mydata.png', dpi=300, bbox_inches='tight')
 
 #----------------------------------------------------------------------------##
 #in_bin = np.zeros((len(ang_size_bin)))
@@ -353,7 +354,7 @@ w_M31_ft_pos = np.concatenate((w_M31_fr_pos0,w_M31_fr_pos1,w_M31_fr_pos2,w_M31_f
 
 plt.figure()
 plt.xscale('log')
-plt.plot(M31_fr_pos,w_M31_ft_pos)
+#plt.plot(M31_fr_pos,w_M31_ft_pos)
 plt.xlabel('arcseconds')
 plt.ylabel('Intensity')
 plt.savefig('./weighted_baselines_VLA.png', dpi=300, bbox_inches='tight')
@@ -460,30 +461,52 @@ t = 86400 #arcseconds
 v = 1 #GHz
 
 VLA_dI = dela_I(SEFD,nc,n_p,N,t,v)
-VLA_dI[0] = VLA_dI[1] = VLA_dI[2] = 0
+#VLA_dI[0] = VLA_dI[1] = VLA_dI[2] = 0
 
-#rand_err0 = np.random.normal(I_in_bin_0,(VLA_dI[0]/2))
-#rand_err1 = np.random.normal(I_in_bin_1,(VLA_dI[1]/2))
-#rand_err2 = np.random.normal(I_in_bin_2,(VLA_dI[2]/2))
-rand_err3 = np.random.normal(I_in_bin_3,(VLA_dI[3]/2))
-rand_err4 = np.random.normal(I_in_bin_4,(VLA_dI[4]/2))
-rand_err5 = np.random.normal(I_in_bin_5,(VLA_dI[5]/2))
-rand_err6 = np.random.normal(I_in_bin_6,(VLA_dI[6]/2))
-rand_err7 = np.random.normal(I_in_bin_7,(VLA_dI[7]/2))
-rand_err8 = np.random.normal(I_in_bin_8,(VLA_dI[8]/2))
-rand_err9 = np.random.normal(I_in_bin_9,(VLA_dI[9]/2))
-rand_err10 = np.random.normal(I_in_bin_10,(VLA_dI[10]/2))
-rand_err11 = np.random.normal(I_in_bin_11,(VLA_dI[11]/2))
-rand_err12 = np.random.normal(I_in_bin_12,(VLA_dI[12]/2))
-rand_err13 = np.random.normal(I_in_bin_13,(VLA_dI[13]/2))
-rand_err14 = np.random.normal(I_in_bin_14,(VLA_dI[14]/2))
+'''rand_err0 = np.random.normal(175*I_in_bin_0,(VLA_dI[0]/2))
+rand_err1 = np.random.normal(175*I_in_bin_1,(VLA_dI[1]/2))
+rand_err2 = np.random.normal(175*I_in_bin_2,(VLA_dI[2]/2))
+rand_err3 = np.random.normal(175*I_in_bin_3,(VLA_dI[3]/2))
+rand_err4 = np.random.normal(175*I_in_bin_4,(VLA_dI[4]/2))
+rand_err5 = np.random.normal(175*I_in_bin_5,(VLA_dI[5]/2))
+rand_err6 = np.random.normal(175*I_in_bin_6,(VLA_dI[6]/2))
+rand_err7 = np.random.normal(175*I_in_bin_7,(VLA_dI[7]/2))
+rand_err8 = np.random.normal(175*I_in_bin_8,(VLA_dI[8]/2))
+rand_err9 = np.random.normal(175*I_in_bin_9,(VLA_dI[9]/2))
+rand_err10 = np.random.normal(175*I_in_bin_10,(VLA_dI[10]/2))
+rand_err11 = np.random.normal(175*I_in_bin_11,(VLA_dI[11]/2))
+rand_err12 = np.random.normal(175*I_in_bin_12,(VLA_dI[12]/2))
+rand_err13 = np.random.normal(175*I_in_bin_13,(VLA_dI[13]/2))
+rand_err14 = np.random.normal(175*I_in_bin_14,(VLA_dI[14]/2))'''
 
-rand_err = np.concatenate((rand_err3,rand_err4,rand_err5,rand_err6,rand_err7,rand_err8,rand_err9,rand_err10,rand_err11,rand_err12,rand_err13,rand_err14))
-rand_err = rand_err[:,0]
+#rand_err0 = np.random.normal(0,(VLA_dI[0]))
+#rand_err1 = np.random.normal(0,(VLA_dI[1]))
+#rand_err2 = np.random.normal(0,(VLA_dI[2]))
+rand_err3 = np.random.normal(0,(VLA_dI[3]))
+rand_err4 = np.random.normal(0,(VLA_dI[4]))
+rand_err5 = np.random.normal(0,(VLA_dI[5]))
+rand_err6 = np.random.normal(0,(VLA_dI[6]))
+rand_err7 = np.random.normal(0,(VLA_dI[7]))
+rand_err8 = np.random.normal(0,(VLA_dI[8]))
+rand_err9 = np.random.normal(0,(VLA_dI[9]))
+rand_err10 = np.random.normal(0,(VLA_dI[10]))
+rand_err11 = np.random.normal(0,(VLA_dI[11]))
+rand_err12 = np.random.normal(0,(VLA_dI[12]))
+rand_err13 = np.random.normal(0,(VLA_dI[13]))
+rand_err14 = np.random.normal(0,(VLA_dI[14]))
 
-#sim_data0 = I_in_bin_0 + rand_err3
-#sim_data1 = I_in_bin_0 + rand_err3
-#sim_data2 = I_in_bin_0 + rand_err3
+rand_err = np.array((rand_err3,rand_err4,rand_err5,rand_err6,rand_err7,rand_err8,rand_err9,rand_err10,rand_err11,rand_err12,rand_err13,rand_err14))
+#rand_err = rand_err[:,0]
+
+plt.figure()
+plt.plot(np.abs(rand_err))
+#plt.xscale('log')
+plt.savefig('./rand_err.png', dpi=300, bbox_inches='tight')
+
+
+#sim_data0 = I_in_bin_0 + rand_err0
+#sim_data1 = I_in_bin_1 + rand_err1
+#sim_data2 = I_in_bin_2 + rand_err2
 sim_data3 = I_in_bin_3 + rand_err3
 sim_data4 = I_in_bin_4 + rand_err4
 sim_data5 = I_in_bin_5 + rand_err5
@@ -497,13 +520,46 @@ sim_data12 = I_in_bin_12 + rand_err12
 sim_data13 = I_in_bin_13 + rand_err13
 sim_data14 = I_in_bin_14 + rand_err14
 
+rand_err_3 = np.array([rand_err3]*len(I_in_bin_3))
+rand_err_4 = np.array([rand_err4]*len(I_in_bin_4))
+rand_err_5 = np.array([rand_err5]*len(I_in_bin_5))
+rand_err_6 = np.array([rand_err6]*len(I_in_bin_6))
+rand_err_7 = np.array([rand_err7]*len(I_in_bin_7))
+rand_err_8 = np.array([rand_err8]*len(I_in_bin_8))
+rand_err_9 = np.array([rand_err9]*len(I_in_bin_9))
+rand_err_10 = np.array([rand_err10]*len(I_in_bin_10))
+rand_err_11= np.array([rand_err11]*len(I_in_bin_11))
+rand_err_12 = np.array([rand_err12]*len(I_in_bin_12))
+rand_err_13 = np.array([rand_err13]*len(I_in_bin_13))
+rand_err_14 = np.array([rand_err14]*len(I_in_bin_14))
+
+randerr = np.concatenate((rand_err_3,rand_err_4,rand_err_5,rand_err_6,rand_err_7,rand_err_8,rand_err_9,rand_err_10,rand_err_11,rand_err_12,rand_err_13,rand_err_14))
+
+'''sim_data0 = I_in_bin_0 + VLA_dI[0]
+sim_data1 = I_in_bin_1 + VLA_dI[1]
+sim_data2 = I_in_bin_2 + VLA_dI[2]
+sim_data3 = I_in_bin_3 + VLA_dI[3]
+sim_data4 = I_in_bin_4 + VLA_dI[4]
+sim_data5 = I_in_bin_5 + VLA_dI[5]
+sim_data6 = I_in_bin_6 + VLA_dI[6]
+sim_data7 = I_in_bin_7 + VLA_dI[7]
+sim_data8 = I_in_bin_8 + VLA_dI[8]
+sim_data9 = I_in_bin_9 + VLA_dI[9]
+sim_data10 = I_in_bin_10 + VLA_dI[10]
+sim_data11 = I_in_bin_11 + VLA_dI[11]
+sim_data12 = I_in_bin_12 + VLA_dI[12]
+sim_data13 = I_in_bin_13 + VLA_dI[13]
+sim_data14 = I_in_bin_14 + VLA_dI[14]'''
+
 sim_data = np.concatenate((sim_data3,sim_data4,sim_data5,sim_data6,sim_data7,sim_data8,sim_data9,sim_data10,sim_data11,sim_data12,sim_data13,sim_data14))
 sim_data = sim_data[:,0]
 
 plt.figure()
-plt.errorbar(M31_fr_pos[-446:], 175*sim_data, yerr=175*rand_err, fmt=".k", capsize=0)
+#plt.plot(M31_fr_pos[index_b2:index_b14],175*sim_data,'--')
+#plt.errorbar(M31_fr_pos[index_b2::], 175*sim_data, yerr=175*randerr, fmt=".k", capsize=0)
 plt.plot(M31_fr_pos,175*M31_ft_pos, 'r')
-#plt.xscale('log')
+plt.xscale('log')
+#plt.yscale('log')
 
 plt.savefig('./sersic_profile_sim_errors.png', dpi=300, bbox_inches='tight')
 
